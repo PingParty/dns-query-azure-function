@@ -33,4 +33,5 @@ module.exports = function (context, req) {
         context.log('Finished processing request: ' + delta.toString() + 'ms');
         context.done();
     });
+    dnsReq.send();
 };
