@@ -1,17 +1,36 @@
-module.exports = function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+var dns = require('native-dns');
 
-    if (req.query.name || (req.body && req.body.name)) {
-        context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: "Hello222 " + (req.query.name || req.body.name)
-        };
-    }
-    else {
-        context.res = {
-            status: 400,
-            body: "Please pass a name on the query string or in the request body"
-        };
-    }
-    context.done();
+module.exports = function (context, req) {
+    context.log('Querying');
+
+    var question = dns.Question({
+        name: 'www.google.com',
+        type: 'A',
+    });
+    var start = Date.now();
+    var dnsReq = dns.Request({
+        question: question,
+        server: {
+            address: '1.1.1.1',
+            port: 53,
+            type: 'udp'
+        },
+        timeout: 1500,
+    });
+
+    dnsReq.on('timeout', function () {
+        context.log('Timeout in making request');
+    });
+
+    dnsReq.on('message', function (err, answer) {
+        answer.answer.forEach(function (a) {
+            context.log(a.address);
+        });
+    });
+
+    dnsReq.on('end', function () {
+        var delta = (Date.now()) - start;
+        context.log('Finished processing request: ' + delta.toString() + 'ms');
+        context.done();
+    });
 };
