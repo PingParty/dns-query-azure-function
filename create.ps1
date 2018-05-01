@@ -1,12 +1,12 @@
-az functionapp list-consumption-locations | ConvertFrom-Json | Write-Output | foreach { 
-    $env:region = $_.name
+foreach($region in Get-Content .\regions.txt) { 
+    $region
 
-    az group create --name dnsQuery-$env:region --location $env:region
+    az group create --name dnsQuery-$region --location $region
 
-    az storage account create --name dnsstorage$env:region --location $env:region `
-      --resource-group dnsQuery-$env:region --sku Standard_LRS
+    az storage account create --name dnsstorage$region --location $region `
+      --resource-group dnsQuery-$region --sku Standard_LRS
 
     az functionapp create --deployment-source-url https://github.com/PingParty/dns-query-azure-function `
-      --resource-group dnsQuery-$env:region --consumption-plan-location $env:region `
-      --name dnsQuery-$env:region --storage-account dnsstorage$env:region  
+      --resource-group dnsQuery-$region --consumption-plan-location $region `
+      --name dnsQuery-$region --storage-account dnsstorage$region  
 }

@@ -1,5 +1,5 @@
-az functionapp list-consumption-locations | ConvertFrom-Json | Write-Output | foreach { 
-    $env:region = $_.name
+foreach($region in Get-Content .\regions.txt) { 
+    $region
 
-    az functionapp deployment source sync --name dnsQuery-$env:region --resource-group dnsQuery-$env:region
+    az functionapp deployment source sync --name dnsQuery-$region --resource-group dnsQuery-$region
 }
