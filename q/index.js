@@ -11,7 +11,7 @@ module.exports = function (context, req) {
         var ck = checks[i];
         makeReq(ck.name, ck.addr, context,i, function(idx,result,time){
             context.log(`Finished query ${idx}: ${time.toString()}ms`);
-            answers[i] = {time:time.toString(),v:result}
+            answers[idx] = {time:time.toString(),v:result}
             pending--;
             if (pending == 0){
                 context.bindings.res = { status: 200, body: answers };
