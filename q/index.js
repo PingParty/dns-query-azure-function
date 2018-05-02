@@ -14,6 +14,7 @@ module.exports = function (context, req) {
             answers[i] = {time:time.toString(),v:result}
             pending--;
             if (pending == 0){
+                context.bindings.response = { status: 200, body: answers };
                 context.done();
             }
         })
