@@ -33,7 +33,7 @@ function makeReq(name, target, context, idx, callback){
             port: 53,
             type: 'udp'
         },
-        timeout: 1500,
+        timeout: 2000,
     });
 
     dnsReq.on('timeout', function () {
