@@ -37,12 +37,12 @@ function makeReq(name, target, context, idx, callback){
     });
 
     dnsReq.on('timeout', function () {
-        context.log('Timeout in making request');
+        context.log(`Timeout in making request for ${name} from ${target}`);
     });
 
     dnsReq.on('message', function (err, answer) {
         answer.answer.forEach(function (a) {
-            context.log(a.address);
+            context.log(`${target} replies ${a.address} for ${name}`;
         });
     });
 
