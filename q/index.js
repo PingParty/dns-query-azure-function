@@ -2,18 +2,35 @@ var dns = require('native-dns');
 
 module.exports = function (context, req) {
     
-    var pending = req.body.length;
-    context.log(pending, req.body, typeof req.body);
+    var checks = req.body.checks;
+    context.log(checks.length);
+    var pending = checks.length;
 
+    for (var i = 0; i<checks.length; i++){
+        var ck = checks[i];
+        var i2 = i;
+        makeReq(ck.name, ck.addr, context, function(time){
+            context.log(`Finished query ${i2}: ${time.toString()}ms`);
+            pending--;
+            if (pending == 0){
+                context.done();
+            }
+        })
+    }
+
+};
+
+function makeReq(name, target, context, callback){
+    
     var question = dns.Question({
-        name: 'www.google.com',
+        name: name,
         type: 'A',
     });
     var start = Date.now();
     var dnsReq = dns.Request({
         question: question,
         server: {
-            address: '1.1.1.1',
+            address: target,
             port: 53,
             type: 'udp'
         },
@@ -32,8 +49,7 @@ module.exports = function (context, req) {
 
     dnsReq.on('end', function () {
         var delta = (Date.now()) - start;
-        context.log('Finished processing request: ' + delta.toString() + 'ms');
-        context.done();
+        callback(delta);
     });
     dnsReq.send();
-};
+}
