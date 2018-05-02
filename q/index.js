@@ -8,7 +8,7 @@ module.exports = function (context, req) {
 
     for (var i = 0; i<checks.length; i++){
         var ck = checks[i];
-        makeReq(ck.name, ck.addr, context,idx, function(idx,time){
+        makeReq(ck.name, ck.addr, context,i, function(idx,time){
             context.log(`Finished query ${idx}: ${time.toString()}ms`);
             pending--;
             if (pending == 0){
