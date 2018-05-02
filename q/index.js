@@ -8,9 +8,8 @@ module.exports = function (context, req) {
 
     for (var i = 0; i<checks.length; i++){
         var ck = checks[i];
-        var i2 = i;
-        makeReq(ck.name, ck.addr, context, function(time){
-            context.log(`Finished query ${i2}: ${time.toString()}ms`);
+        makeReq(ck.name, ck.addr, context, function(idx,time){
+            context.log(`Finished query ${idx}: ${time.toString()}ms`);
             pending--;
             if (pending == 0){
                 context.done();
@@ -20,7 +19,7 @@ module.exports = function (context, req) {
 
 };
 
-function makeReq(name, target, context, callback){
+function makeReq(name, target, context, idx, callback){
     
     var question = dns.Question({
         name: name,
@@ -49,7 +48,7 @@ function makeReq(name, target, context, callback){
 
     dnsReq.on('end', function () {
         var delta = (Date.now()) - start;
-        callback(delta);
+        callback(idx, delta);
     });
     dnsReq.send();
 }
