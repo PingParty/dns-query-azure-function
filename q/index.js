@@ -14,7 +14,7 @@ module.exports = function (context, req) {
             answers[i] = {time:time.toString(),v:result}
             pending--;
             if (pending == 0){
-                context.bindings.response = { status: 200, body: answers };
+                context.bindings.res = { status: 200, body: answers };
                 context.done();
             }
         })
@@ -48,7 +48,6 @@ function makeReq(name, target, context, idx, callback){
     });
 
     dnsReq.on('message', function (err, answer) {
-        context.log(err, answer)
         answer.answer.forEach(function (a) {
             result = a.address;
             context.log(`${target} replies ${a.address} for ${name}`);
