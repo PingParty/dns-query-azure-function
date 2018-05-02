@@ -34,6 +34,7 @@ function makeReq(name, target, context, idx, callback){
             type: 'udp'
         },
         timeout: 2000,
+        cache: false,
     });
 
     dnsReq.on('timeout', function () {
@@ -41,6 +42,7 @@ function makeReq(name, target, context, idx, callback){
     });
 
     dnsReq.on('message', function (err, answer) {
+        
         answer.answer.forEach(function (a) {
             context.log(`${target} replies ${a.address} for ${name}`);
         });
