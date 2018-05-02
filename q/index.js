@@ -42,7 +42,7 @@ function makeReq(name, target, context, idx, callback){
 
     dnsReq.on('message', function (err, answer) {
         answer.answer.forEach(function (a) {
-            context.log(`${target} replies ${a.address} for ${name}`;
+            context.log(`${target} replies ${a.address} for ${name}`);
         });
     });
 
