@@ -3,7 +3,7 @@ var dns = require('native-dns');
 module.exports = function (context, req) {
     
     var pending = req.body.length;
-    context.log(pending, req.body);
+    context.log(pending, req.body, typeof req.body);
 
     var question = dns.Question({
         name: 'www.google.com',
